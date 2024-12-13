@@ -112,7 +112,7 @@ public class RealSystem : MonoBehaviour
 
             // Convert to world space using the reference object
             Vector3 worldCentroid = Ref.transform.TransformPoint(localCentroid);
-            // worldCentroid *= -1;
+            worldCentroid.z *= -1;
             transformedCentroids.Add(key, worldCentroid);  // Save the transformed world coordinates
 
             // Update the position of the game object based on the transformed centroid

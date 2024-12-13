@@ -112,8 +112,7 @@ public class SystemManager : MonoBehaviour
     void StartSimulateTrajectory()
     {
         // Get StartingPosition of RealBall
-        // virtualSystem.SetStartingPosition(realBallTrajectory.First().Value);
-        virtualSystem.SetStartingPosition(startingPos);
+        virtualSystem.SetStartingPosition(realBallTrajectory.First().Value);
         // Simulate virtual ball
         virtualSystem.ToStartPosition();
         virtualSystem.DropBall();

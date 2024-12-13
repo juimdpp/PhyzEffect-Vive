@@ -72,7 +72,7 @@ public class VirtualSystem : MonoBehaviour
 
     public void ToStartPosition()
     {
-        VirtualBall.GetComponent<Transform>().position =  new Vector3(initPosition.x, StartingPosition.y, initPosition.z);
+        VirtualBall.GetComponent<Transform>().position =  new Vector3(StartingPosition.x, StartingPosition.y, StartingPosition.z);
         LogAndDisplay("Changed VirtualBall position to " + VirtualBall.GetComponent<Transform>().position + " from " + initPosition);
     }
     public void DropBall() // And also start tracking
