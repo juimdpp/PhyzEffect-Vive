@@ -18,8 +18,11 @@ public class SystemManager : MonoBehaviour
     public Button StartSimulateBtn;
     public Button EndSimulateBtn;
     public Button GetVirtBallTrajectoryBtn;
-    public Button CompareTrajectoriesBtn;
     
+    public Button CompareTrajectoriesBtn;
+
+    public TMP_Dropdown SearchTypeDropdown; // TODO
+    public TMP_Dropdown SurfaceTypeDropdown;// TODO
 
 
     public TMP_Text statusText;
