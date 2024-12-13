@@ -3356,7 +3356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageRetriever: {fileID: 859701131}
-  markerWidthMeters: 0.186
+  markerWidthMeters: 0.037
   markerDictionary: 0
 --- !u!4 &857114140
 Transform:
