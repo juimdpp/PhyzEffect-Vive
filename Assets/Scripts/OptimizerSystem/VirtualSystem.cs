@@ -11,46 +11,63 @@ public class VirtualSystem : MonoBehaviour
     public string transformedCentroidFilePath = "Assets/MyAssets/transformedCentroids.txt";
     public string virtualCentroidFilePath = "GitIgnoredFiles/virtualCentroids.txt";
     public GameObject VirtualBall;
-    public GameObject Desk;
+    public GameObject Surface;
     public TMP_Text statusText;
 
     // Virtual-object related buttons
-    public Button IncreaseBtn;
-    public Button DecreaseBtn;
-    public TMP_Text bouncinessCurrentValue;
-    public TMP_Dropdown BallTypeDropdown;
-    
+    public Button SurfaceIncreaseBtn;
+    public Button SurfaceDecreaseBtn;
+    public TMP_Text surfaceBouncinessCurrentValue;
+    public Button BallIncreaseBtn;
+    public Button BallDecreaseBtn;
+    public TMP_Text ballBouncinessCurrentValue;
+
 
     private SortedDictionary<double, Vector3> virtualCentroids = new SortedDictionary<double, Vector3>();  // Virtual coordinates
     private bool trackVirtual = false;
     private Vector3 StartingPosition = new Vector3(0, 0, 0);
     // private GameObject VirtualBall;
-    private string[] ballTypeNames = { "TableTennisBall", "TennisBall" };
+    private string[] ballTypeNames = { "ball1", "ball2" };
     int ballTypeIdx = 0;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Surface Button click listeners
+        SurfaceIncreaseBtn.onClick.AddListener(SurfaceIncrease);
+        SurfaceDecreaseBtn.onClick.AddListener(SurfaceDecrease);
+
         // Button click listeners
-        IncreaseBtn.onClick.AddListener(Increase);
-        DecreaseBtn.onClick.AddListener(Decrease);
-        BallTypeDropdown.onValueChanged.AddListener(ChangeVirtualBall);
+        BallIncreaseBtn.onClick.AddListener(BallIncrease);
+        BallDecreaseBtn.onClick.AddListener(BallDecrease);
 
         // Default values
-        ChangeVirtualBall(0);
-        bouncinessCurrentValue.text = "bounciness";
+        surfaceBouncinessCurrentValue.text = "surface bounciness";
+        ballBouncinessCurrentValue.text = "ball bounciness";
     }
 
-    private void Increase()
+    private void SurfaceIncrease()
     {
         VirtualBall.GetComponent<Collider>().material.bounciness += 0.1f;
-        bouncinessCurrentValue.text = VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
+        surfaceBouncinessCurrentValue.text = Surface.GetComponent<Collider>().material.bounciness.ToString();
     }
 
-    private void Decrease()
+    private void SurfaceDecrease()
     {
         VirtualBall.GetComponent<Collider>().material.bounciness -= 0.1f;
-        bouncinessCurrentValue.text = VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
+        surfaceBouncinessCurrentValue.text = Surface.GetComponent<Collider>().material.bounciness.ToString();
+    }
+
+    private void BallIncrease()
+    {
+        VirtualBall.GetComponent<Collider>().material.bounciness += 0.1f;
+        ballBouncinessCurrentValue.text = VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
+    }
+
+    private void BallDecrease()
+    {
+        VirtualBall.GetComponent<Collider>().material.bounciness -= 0.1f;
+        ballBouncinessCurrentValue.text = VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
     }
 
 
@@ -122,7 +139,7 @@ public class VirtualSystem : MonoBehaviour
         LogAndDisplay("Stop tracking VirtualBall");
     }
     public void SaveVirtualResults() {
-        float bounciness = Desk.GetComponent<MeshCollider>().material.bounciness;
+        float bounciness = Surface.GetComponent<MeshCollider>().material.bounciness;
         string baseFileName = Path.GetFileNameWithoutExtension(virtualCentroidFilePath);
         string extension = Path.GetExtension(virtualCentroidFilePath);
         // Initial file path

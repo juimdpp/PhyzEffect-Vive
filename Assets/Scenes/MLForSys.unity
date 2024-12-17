@@ -1840,7 +1840,7 @@ GameObject:
   - component: {fileID: 813285196}
   - component: {fileID: 813285195}
   m_Layer: 5
-  m_Name: CurrentY
+  m_Name: CurrentBounciness
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1885,7 +1885,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Current Y
+  m_text: Current Bounciness
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2806,8 +2806,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d961470693050ce448d7604340c72be8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transformedCentroidFilePath: GitIgnoredFiles/transformedCentroids.txt
-  virtualCentroidFilePath: GitIgnoredFiles/virtualCentroids.txt
+  transformedCentroidFilePath: project-deliverables/MLForSys/ball1_hard/output/ball1_hard_centroids_transformed.txt
+  virtualCentroidFilePath: project-deliverables/MLForSys/ball1_hard/output/ball1_hard_virtual_centroids.txt
   VirtualBall: {fileID: 2142249193}
   Desk: {fileID: 448966786}
   statusText: {fileID: 1818497120}
@@ -2827,8 +2827,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b6ab9f467e48f4b8b6dbf6f4a2b7d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  centroidFilePath: GitIgnoredFiles/centroids.txt
-  transformedCentroidFilePath: GitIgnoredFiles/transformedCentroids.txt
+  centroidFilePath: project-deliverables/MLForSys/ball1_hard/output/ball1_hard_centroids.txt
+  transformedCentroidFilePath: project-deliverables/MLForSys/ball1_hard/output/ball1_hard_centroids_transformed.txt
   statusText: {fileID: 1818497120}
   Ref: {fileID: 883453436}
 --- !u!114 &1150327380
