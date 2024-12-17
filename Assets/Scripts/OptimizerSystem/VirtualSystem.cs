@@ -21,18 +21,20 @@ public class VirtualSystem : MonoBehaviour
     public Button BallIncreaseBtn;
     public Button BallDecreaseBtn;
     public TMP_Text ballBouncinessCurrentValue;
+    
+    public TMP_Text massAndSize;
 
 
     private SortedDictionary<double, Vector3> virtualCentroids = new SortedDictionary<double, Vector3>();  // Virtual coordinates
     private bool trackVirtual = false;
     private Vector3 StartingPosition = new Vector3(0, 0, 0);
-    // private GameObject VirtualBall;
-    private string[] ballTypeNames = { "ball1", "ball2" };
-    int ballTypeIdx = 0;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        // Set mass and size
+        massAndSize.text = $"{VirtualBall.GetComponent<Rigidbody>().mass}g || {VirtualBall.GetComponent<Transform>().localScale}";
         // Surface Button click listeners
         SurfaceIncreaseBtn.onClick.AddListener(SurfaceIncrease);
         SurfaceDecreaseBtn.onClick.AddListener(SurfaceDecrease);
@@ -81,25 +83,6 @@ public class VirtualSystem : MonoBehaviour
     }
 
 
-    private void ChangeVirtualBall(int index)
-    {
-        switch (index)
-        {
-            case 0:
-                VirtualBall.GetComponent<Transform>().localScale = new Vector3(0.04f, 0.04f, 0.04f);
-                VirtualBall.GetComponent<Rigidbody>().mass = 0.0027f;
-                ballTypeIdx = 0;
-                LogAndDisplay("Switched to Table Tennis Ball");
-                break;
-            case 1:
-                VirtualBall.GetComponent<Transform>().localScale = new Vector3(0.067f, 0.067f, 0.067f);
-                VirtualBall.GetComponent<Rigidbody>().mass = 0.059f;
-                ballTypeIdx = 1;
-                LogAndDisplay("Switched to Tennis Ball");
-                break;
-        }
-    }
-
     public SortedDictionary<double, Vector3> GetSimulatedVirtualBallTrajectory()
     {
         if (trackVirtual)
@@ -130,7 +113,7 @@ public class VirtualSystem : MonoBehaviour
         trackVirtual = true;
         VirtualBall.GetComponent<Rigidbody>().useGravity = true;
         LogAndDisplay("Drop VirtualBall and start tracking");
-        Debug.Log("Bounciness: " + VirtualBall.GetComponent<SphereCollider>().material.bounciness);
+        Debug.Log("Bounciness: " + VirtualBall.GetComponent<Collider>().material.bounciness);
     }
     public void StopTracking() {
         VirtualBall.GetComponent<Rigidbody>().useGravity = false;
@@ -139,18 +122,19 @@ public class VirtualSystem : MonoBehaviour
         LogAndDisplay("Stop tracking VirtualBall");
     }
     public void SaveVirtualResults() {
-        float bounciness = Surface.GetComponent<MeshCollider>().material.bounciness;
+        float surfaceBounciness = Surface.GetComponent<Collider>().material.bounciness;
+        float ballBounciness = VirtualBall.GetComponent<Collider>().material.bounciness;
         string baseFileName = Path.GetFileNameWithoutExtension(virtualCentroidFilePath);
         string extension = Path.GetExtension(virtualCentroidFilePath);
         // Initial file path
-        string filePath = $"{baseFileName}_{ballTypeNames[ballTypeIdx]}_{bounciness}_0{extension}";
+        string filePath = $"{baseFileName}_{ballBounciness}_{surfaceBounciness}_0{extension}";
         Debug.Log("start: " + filePath);
         // Check if the file exists, and increment the number if it does
         int counter = 0;
         while (File.Exists(filePath))
         {
             counter++;
-            filePath = $"{baseFileName}_{ballTypeNames[ballTypeIdx]}_{bounciness}_{counter}{extension}";
+            filePath = $"{baseFileName}_{ballBounciness}_{surfaceBounciness}_{counter}{extension}";
             Debug.Log(counter + ": " + filePath);
         }
         

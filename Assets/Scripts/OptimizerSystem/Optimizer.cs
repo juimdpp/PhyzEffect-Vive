@@ -27,10 +27,6 @@ public class SystemManager : MonoBehaviour
 
     public TMP_Text statusText;
 
-    // GameObjects
-    
-    public GameObject realBall;
-
     // Filenames
     
 
