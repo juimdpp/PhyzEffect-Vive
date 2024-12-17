@@ -17,14 +17,8 @@ public class SystemManager : MonoBehaviour
     public Button GetRealBallTrajectoryBtn;
     public Button StartSimulateBtn;
     public Button EndSimulateBtn;
-    public Button GetVirtBallTrajectoryBtn;
-    
-    public Button CompareTrajectoriesBtn;
-
-    public TMP_Dropdown SearchTypeDropdown; // TODO
-    public TMP_Dropdown SurfaceTypeDropdown;// TODO
-
-
+    public Button RunAllSimulationsBtn;
+  
     public TMP_Text statusText;
 
     // Filenames
@@ -46,15 +40,18 @@ public class SystemManager : MonoBehaviour
 
 
         GetRealBallTrajectoryBtn.onClick.AddListener(GetRealBallTrajectory);
-        GetVirtBallTrajectoryBtn.onClick.AddListener(GetVirtualBallTrajectory);
         StartSimulateBtn.onClick.AddListener(StartSimulateTrajectory);
         EndSimulateBtn.onClick.AddListener(EndSimulateTrajectory);
+        RunAllSimulationsBtn.onClick.AddListener(SimulateTrajectories);
 
 
-        //PrepareTrajectoriesBtn.onClick.AddListener(algorithmSystem.PrepareTrajectories);
-        CompareTrajectoriesBtn.onClick.AddListener(CompareTrajectories);
-        //OptimizeBtn.onClick.AddListener(algorithmSystem.Optimize);
+    }
 
+    private void SimulateTrajectories()
+    {
+        // Assume this is called after getting RealTrajectory
+        double duration = realBallTrajectory.Last().Key - realBallTrajectory.First().Key;
+        virtualSystem.RunAllSimulations(duration, realBallTrajectory.First().Value);
     }
 
 
@@ -95,12 +92,12 @@ public class SystemManager : MonoBehaviour
     {
         Debug.Log("Getting RealBall's trajectory!" );
         // TODO: uncomment this. Currently using same real-world trajectory for debugging
-        /*realSystem.AutoRun();
+        realSystem.AutoRun();
         realBallTrajectory = realSystem.GetTransformedCentroids();
         realSystem.SaveRealResults();
-        */
         
-        LoadCentroidsFromFile();
+        
+        // LoadCentroidsFromFile();
         // END OF TODO: erase
 
         Debug.Log("Got RealBall's trajectory!" + realBallTrajectory.First().Key + " -- " + realBallTrajectory.First().Value);
@@ -124,33 +121,6 @@ public class SystemManager : MonoBehaviour
         virtualSystem.SaveVirtualResults();
     }
 
-    void GetVirtualBallTrajectory()
-    {
-        virtBallTrajectory = virtualSystem.GetSimulatedVirtualBallTrajectory();
-        Debug.Log("Got VirtBall's trajectory!");
-    }
-
-    void CompareTrajectories()
-    {
-        Debug.Log("Assume that even RealBall moves after first frame");
-
-        
-        Debug.Log("Virtual Ball Trajectory");
-        for (int i=0; i<5; i++)
-        {
-            Debug.Log(virtBallTrajectory.ElementAt(i));
-        }
-        Debug.Log("Real Ball Trajectory");
-        for (int i = 0; i < 5; i++)
-        {
-            Debug.Log(realBallTrajectory.ElementAt(i));
-        }
-    }
-
-    void Optimize()
-    {
-
-    }
 
     // Use case
     /*

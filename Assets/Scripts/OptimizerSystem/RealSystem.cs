@@ -39,9 +39,15 @@ public class RealSystem : MonoBehaviour
     {
         if (File.Exists(centroidFilePath))
         {
+            bool start = true;
             string[] lines = File.ReadAllLines(centroidFilePath);
             foreach (string line in lines)
             {
+                if (start)
+                {
+                    start = false;
+                    continue;
+                }
                 string[] split = line.Split(',');
                 if (split.Length == 4)
                 {

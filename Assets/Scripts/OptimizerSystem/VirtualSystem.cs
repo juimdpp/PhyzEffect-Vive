@@ -28,7 +28,7 @@ public class VirtualSystem : MonoBehaviour
     private SortedDictionary<double, Vector3> virtualCentroids = new SortedDictionary<double, Vector3>();  // Virtual coordinates
     private bool trackVirtual = false;
     private Vector3 StartingPosition = new Vector3(0, 0, 0);
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -82,6 +82,35 @@ public class VirtualSystem : MonoBehaviour
         }
     }
 
+    public void RunAllSimulations(double duration, Vector3 pos)
+    {
+        StartCoroutine(SimulationCoroutine(duration, pos));   
+    }
+
+    public IEnumerator SimulationCoroutine(double duration, Vector3 pos)
+    {
+        LogAndDisplay($"Run each simulation for {duration} milliseconds");
+        for (float ball = 0.1f; ball < 1; ball += 0.5f)
+        {
+            VirtualBall.GetComponent<Collider>().material.bounciness = ball;
+            for (float surface = 0.1f; surface < 1; surface += 0.5f)
+            {
+                Surface.GetComponent<Collider>().material.bounciness = surface;
+
+                SetStartingPosition(pos);
+                ToStartPosition();
+                DropBall(); // Start simulation
+
+                // Wait until trackingDuration has elapsed
+                yield return new WaitForSeconds((float)(duration/1000));
+                StopTracking();
+                SaveVirtualResults();
+                LogAndDisplay($"Simulation finished for Ball Bounciness: {ball} and Surface Bounciness: {surface}");
+            }
+        }
+        LogAndDisplay($"Finished all simulations");
+    }
+
 
     public SortedDictionary<double, Vector3> GetSimulatedVirtualBallTrajectory()
     {
@@ -125,16 +154,17 @@ public class VirtualSystem : MonoBehaviour
         float surfaceBounciness = Surface.GetComponent<Collider>().material.bounciness;
         float ballBounciness = VirtualBall.GetComponent<Collider>().material.bounciness;
         string baseFileName = Path.GetFileNameWithoutExtension(virtualCentroidFilePath);
+        string dirName = Path.GetDirectoryName(virtualCentroidFilePath);
         string extension = Path.GetExtension(virtualCentroidFilePath);
         // Initial file path
-        string filePath = $"{baseFileName}_{ballBounciness}_{surfaceBounciness}_0{extension}";
+        string filePath = $"{dirName}/{baseFileName}_{ballBounciness}_{surfaceBounciness}_0{extension}";
         Debug.Log("start: " + filePath);
         // Check if the file exists, and increment the number if it does
         int counter = 0;
         while (File.Exists(filePath))
         {
             counter++;
-            filePath = $"{baseFileName}_{ballBounciness}_{surfaceBounciness}_{counter}{extension}";
+            filePath = $"{dirName}/{baseFileName}_{ballBounciness}_{surfaceBounciness}_{counter}{extension}";
             Debug.Log(counter + ": " + filePath);
         }
         
