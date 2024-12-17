@@ -82,6 +82,7 @@ public class VirtualSystem : MonoBehaviour
         }
     }
 
+    // Run all possible simulations using gridsearch. TODO: expand to other search methods
     public void RunAllSimulations(double duration, Vector3 pos)
     {
         StartCoroutine(SimulationCoroutine(duration, pos));   
