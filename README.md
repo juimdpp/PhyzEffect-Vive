@@ -1,59 +1,70 @@
 # PhyzEffect-Vive
 
+This repository contains the resources, code, and instructions required to set up and execute the PhyzEffect-Vive system, a pipeline for analyzing real-world object interactions and simulating corresponding virtual trajectories.
+
+---
+
 ## Steps to Set Up and Use
 
-Follow the above steps to extract and simulate the virtual trajectory.
+Follow the steps below to extract and simulate the virtual trajectory from real-world object interactions:
 
-1. **Setup ZED Camera.**
+### 1. **Set Up the ZED Camera**
+   - Install the ZED Mini or ZED2 camera as required for your setup.
+   - Ensure the camera drivers and the ZED SDK are properly installed on your system.
+   - Verify the camera functionality using the ZED SDK tools provided by [Stereolabs](https://www.stereolabs.com/).
 
-2. **Setup Scene.**
-   - Print at least 3 ArUco markers and place them in the scene.
-   - Ensure the markers have different x, y, z positions so the bounding box created by them surrounds the entire scene in 3D.
+### 2. **Prepare the Scene**
+   - Print at least 3 ArUco markers.
+   - Place the markers in the scene at distinct positions such that they form a bounding box in 3D space that fully encloses the scene.
+   - Ensure the markers are clearly visible and evenly distributed across the scene.
 
-3. **Scan the Real World.**
-   - Use Scaniverse to scan the scene.
-   - Ensure the ArUco markers are clearly visible in the scan.
+### 3. **Scan the Real World**
+   - Use [Scaniverse](https://scaniverse.com/) to create a 3D scan of the scene.
+   - Verify that the ArUco markers are clearly visible in the captured scan.
 
-4. **Record Video of Interacting Object.**
-   - *(TODO: Additional GUI needed to make this feature accessible to end-users.)*
-   - Use the Unity app provided in the repository.
-     - Set the file directory for saving the recording.
-     - Press "Start recording," perform the interaction, and ensure the camera remains stationary.
-     - Press "Stop recording."
-   - **Note:** Sample recordings used in the final results are included.
+### 4. **Record the Interaction**
+   - *(TODO: Add a GUI feature to improve end-user accessibility.)*
+   - Use the Unity app provided in the repository:
+     1. Set the directory path where the recording will be saved.
+     2. Press "Start recording" and perform the object interaction in the scene. Ensure the camera remains stationary.
+     3. Stop the recording after completing the interaction.
+   - **Note:** The starting position of the ball in the recording must match its initial position for simulation. Sample recordings used for the final results are included in the repository.
 
-5. **Export SVO Video into RGB + Depth PNG Images.**
-   - Use the executable provided by ZED SDK: [ZED SDK Export Tool](https://github.com/stereolabs/zed-sdk/tree/master/recording/export/svo/cpp).
+### 5. **Export SVO Video to RGB + Depth PNG Images**
+   - Use the ZED SDK's SVO export tool to extract RGB and depth images from the video.
+   - [ZED SDK Export Tool](https://github.com/stereolabs/zed-sdk/tree/master/recording/export/svo/cpp).
    - **Run Command:**
 
      ```bash
      ./ZED_SVO_Export.exe "path/to/file.svo" "path/to/output/folder"
      ```
 
-   - Converted images for sample recordings are included.
+   - Converted images for sample recordings are provided in the repository.
 
-6. **Analyze Recordings to Get Bounding Boxes.**
-   - Use the Python script for analysis. Manually annotate frames where the ball is not detected.
-     - Install dependencies with `pip install -r requirements.txt`.
-     - Run `3d-annotate.ipynb` and modify the `base_dir` for each video.
-     - The script detects the ball and prompts for manual annotation if needed.
-     - Outputs 3 files, but only `base_dir_full_annotation.json` is important.
-   - **Note:** Annotated data for sample recordings is included.
+### 6. **Analyze Recordings to Extract Bounding Boxes**
+   - Use the Python script included in the repository to analyze the recordings:
+     1. Install dependencies using `pip install -r requirements.txt`.
+     2. Run `3d-annotate.ipynb` and modify the `base_dir` variable for each video.
+     3. The script will attempt to detect the ball. For frames where the ball is not detected, manual annotation will be required.
+     4. The script generates 3 output files, but only `base_dir_full_annotation.json` is essential.
+   - **Note:** Annotated data for sample recordings is provided in the repository.
 
-7. **Convert Bounding Boxes to Center Points and Camera Coordinates.**
-   - Run the executable:
+### 7. **Convert Bounding Boxes to Camera Coordinates**
+   - Use the ZED SDK executable to extract centroids of the detected ball:
+     - **Run Command:**
 
-     ```bash
-     ZED_Object_detection_image_viewer.exe <svo> <inputfile> <outputfile>
-     ```
+       ```bash
+       ZED_Object_detection_image_viewer.exe <svo> <inputfile> <outputfile>
+       ```
 
-   - The executable extracts the centroid of the detected ball using bounding boxes and saves them in camera coordinates.
-   - **Note:** Instructions for building the executable are available in the [ZED SDK documentation](https://www.stereolabs.com/docs/app-development/cpp/windows). A script to run the sample data is included.
+   - This tool processes the bounding box centroids and converts them into camera space coordinates.
+   - Instructions for building the executable are available in the [ZED SDK documentation](https://www.stereolabs.com/docs/app-development/cpp/windows). A script to process sample data is also included.
 
-8. **Run the Unity Project.**
-   - Use Unity 2022.3.21f1 and ensure ZED SDK is installed.
-   - Open the `MLForSys` scene. The `Optimizer` object has 3 attached scripts:
-     - **`SystemManager.cs`**: Manages the overall procedure, GUIs, and data flow between systems.
-     - **`RealSystem.cs`**: Processes real-world trajectory data, transforming centroids from camera coordinates to world space using the ZED Mini camera.
-     - **`VirtualSystem.cs`**: Simulates the virtual ball trajectory.
-   - Provide the path to the centroid file to convert camera space coordinates to world space.
+### 8. **Run the Unity Project**
+   - Open the Unity project using Unity 2022.3.21f1.
+   - Ensure the ZED SDK is installed and properly configured.
+   - Load the `MLForSys` scene. Locate the `Optimizer` object, which has three scripts attached:
+     - **`SystemManager.cs`**: Manages the overall pipeline, GUI interactions, and data flow.
+     - **`RealSystem.cs`**: Processes real-world trajectory data and transforms centroid coordinates from camera space to world space using the ZED Mini camera.
+     - **`VirtualSystem.cs`**: Simulates the virtual ball trajectory based on the real-world data.
+   - Specify the path to the centroid file to process and simulate the virtual trajectory.
