@@ -81,7 +81,7 @@ Follow the steps below to extract and simulate the virtual trajectory from real-
    - `MLForSys - soft surface` scene uses the soft surface instead of the hard surface.
 
 ### 9.  **Run the Simulation to Obtain Virtual Trajectory**
-   <img src="">
+   <img src="project-deliverables/unity-screen-view.png" width=400>
 
    1. Make sure the zed-mini camera is connected to the PC. Press on the `Play` button on top. 
    2. Wait until the camera works.
@@ -94,3 +94,25 @@ Follow the steps below to extract and simulate the virtual trajectory from real-
 
 ### 10. **Analyze the Tracked Trajectories**
    - Use the `compare.ipynb` to interpolate the trajectories, and calculate the MAE. You can also visualize the results.
+
+## project-deliverables directory
+- The `project-deliverables` directory contains sample inputs/outputs used to obtain for the final results used in the submitted report.
+- `project-deliverables`:
+   - `MLForSys`
+      - `3d-annotate.ipynb`: annotation tool for detecting bounding boxes
+      - `compare.ipynb`: notebook for comparing trajectories
+      - `requirements.txt`: the python requirements needed to run the above to notebooks
+      - `ball<...>.svo2`: the svo recordings of the interactions. You need the zed-sdk installed to run them.
+      - `ball<...>`
+         - `DEPTH`: contains the depth images
+         - `IMAGE`: contains the rgb images
+         - `output`
+            - `ball<...>_full_annotations.json`: json file that contains the bounding boxes. Result after running `3d-annotate.ipynb`.
+            - `ball<...>_centroids.txt`: file that contains the centroids in camera coordinates. Obtained after step 7.
+            - `ball<...>_centroids_transformed.txt`: file that contains the centroids transformed in world coordinate. Obtained after step 9.4.
+            - `ball<...>_virtual_centroids_n_m_i.txt`: file that contains the centroid of the virtual ball in world coordinate. `n` is the bounciness of the virtual ball, `m` is the bounciness of the surface and `i` is the ith iteration.
+   - `ZED_SVO_Export.exe`: executable used in step 5.
+   - `ZED_Object_detection_image_viewer.exe`: executable used in step 7.
+   - `ZED_Object_detection_image_viewer.zip`: zip file containing the code for building the executable.
+   - `pixel2cam.ps1`: powershell script that runs the object detection for all 4 recordings.
+   - `<...>.png`: image files used in this README.
