@@ -91,10 +91,10 @@ public class VirtualSystem : MonoBehaviour
     public IEnumerator SimulationCoroutine(double duration, Vector3 pos)
     {
         LogAndDisplay($"Run each simulation for {duration} milliseconds");
-        for (float ball = 0.1f; ball < 1; ball += 0.5f)
+        for (float ball = 0.9f; ball < 1; ball += 0.1f)
         {
             VirtualBall.GetComponent<Collider>().material.bounciness = ball;
-            for (float surface = 0.1f; surface < 1; surface += 0.5f)
+            for (float surface = 0.5f; surface < 1; surface += 0.1f)
             {
                 Surface.GetComponent<Collider>().material.bounciness = surface;
 
@@ -180,6 +180,7 @@ public class VirtualSystem : MonoBehaviour
             }
         }
         LogAndDisplay("Virtual centroids saved to " + filePath);
+        virtualCentroids.Clear();
     }
 
     void LogAndDisplay(string str)
