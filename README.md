@@ -9,12 +9,12 @@ This repository contains the resources, code, and instructions required to set u
 Follow the steps below to extract and simulate the virtual trajectory from real-world object interactions:
 
 ### 1. **Set Up the ZED Camera**
-   - Install the ZED Mini or ZED2 camera as required for your setup.
+   - Install the ZED Mini or ZED2 camera as required for your setup. Please refer to this [link](https://github.com/stereolabs/zed-sdk/tree/master) for details.
    - Ensure the camera drivers and the ZED SDK are properly installed on your system.
    - Verify the camera functionality using the ZED SDK tools provided by [Stereolabs](https://www.stereolabs.com/).
 
 ### 2. **Prepare the Scene**
-   - Print at least 3 ArUco markers.
+   - Print at least 3 ArUco markers. In this project, we used the 3 first markers from this [generator](https://chev.me/arucogen/).
    - Place the markers in the scene at distinct positions such that they form a bounding box in 3D space that fully encloses the scene.
    - Ensure the markers are clearly visible and evenly distributed across the scene.
 
@@ -28,11 +28,10 @@ Follow the steps below to extract and simulate the virtual trajectory from real-
      1. Set the directory path where the recording will be saved.
      2. Press "Start recording" and perform the object interaction in the scene. Ensure the camera remains stationary.
      3. Stop the recording after completing the interaction.
-   - **Note:** The starting position of the ball in the recording must match its initial position for simulation. Sample recordings used for the final results are included in the repository.
+   - **Note:** Sample recordings used for the final results are included in the repository.
 
 ### 5. **Export SVO Video to RGB + Depth PNG Images**
-   - Use the ZED SDK's SVO export tool to extract RGB and depth images from the video.
-   - [ZED SDK Export Tool](https://github.com/stereolabs/zed-sdk/tree/master/recording/export/svo/cpp).
+   - Use the provided ZED SDK's SVO export tool to extract RGB and depth images from the video.
    - **Run Command:**
 
      ```bash
