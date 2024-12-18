@@ -3,6 +3,11 @@
 This repository contains the resources, code, and instructions required to set up and execute the PhyzEffect-Vive system, a pipeline for analyzing real-world object interactions and simulating corresponding virtual trajectories.
 
 ---
+## Environment Tested
+- Windows 11
+- Unity 2022.3.21f1
+- Zed mini 
+- HTC Vive Pro
 
 ## Steps to Set Up and Use
 
@@ -23,22 +28,23 @@ Follow the steps below to extract and simulate the virtual trajectory from real-
    - Verify that the ArUco markers are clearly visible in the captured scan.
 
 ### 4. **Record the Interaction**
-   - *(TODO: Add a GUI feature to improve end-user accessibility.)*
+   <img src="project-deliverables/recording.png" width=400px>
+
    - Use the Unity app provided in the repository:
      1. Set the directory path where the recording will be saved.
      2. Press "Start recording" and perform the object interaction in the scene. Ensure the camera remains stationary.
      3. Stop the recording after completing the interaction.
-   - **Note:** Sample recordings used for the final results are included in the repository.
+   - **Note:** Sample recordings used for the final results are included in the repository. Please refer to the last section for more details.
 
 ### 5. **Export SVO Video to RGB + Depth PNG Images**
-   - Use the provided ZED SDK's SVO export tool to extract RGB and depth images from the video.
+   - Use the provided ZED SDK's SVO export tool in the `project-deliverables` folder to extract RGB and depth images from the video.
    - **Run Command:**
 
      ```bash
      ./ZED_SVO_Export.exe "path/to/file.svo" "path/to/output/folder"
      ```
 
-   - Converted images for sample recordings are provided in the repository.
+   - **Note:** Converted images for sample recordings are provided in the repository.
 
 ### 6. **Analyze Recordings to Extract Bounding Boxes**
    - Use the Python script included in the repository to analyze the recordings:
@@ -55,9 +61,11 @@ Follow the steps below to extract and simulate the virtual trajectory from real-
        ```bash
        ZED_Object_detection_image_viewer.exe <svo> <inputfile> <outputfile>
        ```
-
+     - You can use the `pixel2cam` script provided in the `project-deliverables` directory to process all 4 recordings.
+     - The `ZED_Object_detection_image_viewer` is an executable that was built based on the ZED sdk's repository. I've modified the code so that it can accept custom bounding boxes (instead of running a detection model). You can find the source code in the `zip` file.
    - This tool processes the bounding box centroids and converts them into camera space coordinates.
    - Instructions for building the executable are available in the [ZED SDK documentation](https://www.stereolabs.com/docs/app-development/cpp/windows). A script to process sample data is also included.
+   - **Note:** The 3D coordinates of the centroids in camera coordinates are also provided in the `project-deliverables` folder.
 
 ### 8. **Run the Unity Project**
    - Open the Unity project using Unity 2022.3.21f1.
@@ -66,4 +74,23 @@ Follow the steps below to extract and simulate the virtual trajectory from real-
      - **`SystemManager.cs`**: Manages the overall pipeline, GUI interactions, and data flow.
      - **`RealSystem.cs`**: Processes real-world trajectory data and transforms centroid coordinates from camera space to world space using the ZED Mini camera.
      - **`VirtualSystem.cs`**: Simulates the virtual ball trajectory based on the real-world data.
-   - Specify the path to the centroid file to process and simulate the virtual trajectory.
+   - Specify the path to the centroid file to process as in the following image and simulate the virtual trajectory.
+   
+   <img src="project-deliverables/optimizer-centroid-file-path.png" width=400>
+
+   - `MLForSys - soft surface` scene uses the soft surface instead of the hard surface.
+
+### 9.  **Run the Simulation to Obtain Virtual Trajectory**
+   <img src="">
+
+   1. Make sure the zed-mini camera is connected to the PC. Press on the `Play` button on top. 
+   2. Wait until the camera works.
+   3. Press on the **`Calibrate`** button to align the scanned scene to the real-world. If you wish to change the scene, you must replace the `Desk` object.
+   4. Press on the **`1/ Real Traj`** to transform the centroids from camera coordinates to world coordinates relative to the zed-mini camera.
+   5. Change the bounciness factor of the desk (Desk/Scaniverse_.../mesh - BoxCollider) at runtime.
+   5. Press on the **`2/StartSim`** to start the simulation of the virtual ball. A virtual ball will be instantiated at the starting position (obtained from the real-world trajectory) and will start to fall.
+   6. Press on the **`3/EndSim`** to end the tracking of the virtual ball. A file (whose name can be specified in the Inspector) containing the virtual trajectory will be saved at the specified location.
+   - **Note** The `Run All Sims`, `Ball Bounciness +-`, `Surface Bounciness +-` buttons does not work properly. I'm trying to fix it in order to simulate the grid search automatically.
+
+### 10. **Analyze the Tracked Trajectories**
+   - Use the `compare.ipynb` to interpolate the trajectories, and calculate the MAE. You can also visualize the results.
