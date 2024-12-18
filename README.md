@@ -1,9 +1,5 @@
 # PhyzEffect-Vive
 
-Link to GitHub repository: [PhyzEffect-Vive](https://github.com/juimdpp/PhyzEffect-Vive)
-
----
-
 ## Steps to Set Up and Use
 
 Follow the above steps to extract and simulate the virtual trajectory.
