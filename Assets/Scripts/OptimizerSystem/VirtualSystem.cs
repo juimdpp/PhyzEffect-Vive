@@ -44,32 +44,36 @@ public class VirtualSystem : MonoBehaviour
         BallDecreaseBtn.onClick.AddListener(BallDecrease);
 
         // Default values
-        surfaceBouncinessCurrentValue.text = "surface bounciness";
-        ballBouncinessCurrentValue.text = "ball bounciness";
+        updateText();
     }
 
+    private void updateText()
+    {
+        surfaceBouncinessCurrentValue.text = "Surface Bounciness: " + Surface.GetComponent<Collider>().material.bounciness.ToString();
+        ballBouncinessCurrentValue.text = "Ball Bounciness: " + VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
+    }
     private void SurfaceIncrease()
     {
-        VirtualBall.GetComponent<Collider>().material.bounciness += 0.1f;
-        surfaceBouncinessCurrentValue.text = Surface.GetComponent<Collider>().material.bounciness.ToString();
+        Surface.GetComponent<Collider>().material.bounciness += 0.1f;
+        updateText();
     }
 
     private void SurfaceDecrease()
     {
-        VirtualBall.GetComponent<Collider>().material.bounciness -= 0.1f;
-        surfaceBouncinessCurrentValue.text = Surface.GetComponent<Collider>().material.bounciness.ToString();
+        Surface.GetComponent<Collider>().material.bounciness -= 0.1f;
+        updateText();
     }
 
     private void BallIncrease()
     {
         VirtualBall.GetComponent<Collider>().material.bounciness += 0.1f;
-        ballBouncinessCurrentValue.text = VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
+        updateText();
     }
 
     private void BallDecrease()
     {
         VirtualBall.GetComponent<Collider>().material.bounciness -= 0.1f;
-        ballBouncinessCurrentValue.text = VirtualBall.GetComponent<Collider>().material.bounciness.ToString();
+        updateText();
     }
 
 
@@ -129,7 +133,8 @@ public class VirtualSystem : MonoBehaviour
 
     public void SetStartingPosition(Vector3 pos)
     {
-        StartingPosition = pos;
+        
+        StartingPosition = VirtualBall.GetComponent<Transform>().position;
         Debug.Log("Starting Position: " + StartingPosition);
     }
 
@@ -185,7 +190,7 @@ public class VirtualSystem : MonoBehaviour
 
     void LogAndDisplay(string str)
     {
-        statusText.text = str;
+        // statusText.text = str;
         Debug.Log(str);
     }
 }

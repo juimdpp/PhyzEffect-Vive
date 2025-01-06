@@ -11,60 +11,43 @@ public class SystemManager : MonoBehaviour
     //// Algorithm related buttons
     public Vector3 startingPos;
 
-    public Button GetRealBallTrajectoryBtn;
     public Button StartSimulateBtn;
     public Button EndSimulateBtn;
-    public Button RunAllSimulationsBtn;
   
     public TMP_Text statusText;
 
+    private bool start = true;
+
     // Systems
     private VirtualSystem virtualSystem;
-    private RealSystem realSystem;
+    // private RealSystem realSystem;
 
-    SortedDictionary<double, Vector3> realBallTrajectory = new SortedDictionary<double, Vector3>();
+    // SortedDictionary<double, Vector3> realBallTrajectory = new SortedDictionary<double, Vector3>();
     // SortedDictionary<double, Vector3> virtBallTrajectory = new SortedDictionary<double, Vector3>();
 
 
     void Start()
     {
         virtualSystem = GetComponent<VirtualSystem>();
-        realSystem = GetComponent<RealSystem>();
+        // realSystem = GetComponent<RealSystem>();
 
-        GetRealBallTrajectoryBtn.onClick.AddListener(GetRealBallTrajectory);
         StartSimulateBtn.onClick.AddListener(StartSimulateTrajectory);
         EndSimulateBtn.onClick.AddListener(EndSimulateTrajectory);
-        RunAllSimulationsBtn.onClick.AddListener(SimulateTrajectories);
     }
 
-    // Simulate all possible trajectories using gridsearch (with 0.1 step)
-    private void SimulateTrajectories()
-    {
-        // Assume this is called after getting RealTrajectory
-        double duration = realBallTrajectory.Last().Key - realBallTrajectory.First().Key;
-        virtualSystem.RunAllSimulations(duration, realBallTrajectory.First().Value);
-    }
-
-
-    void GetRealBallTrajectory()
-    {
-        Debug.Log("Getting RealBall's trajectory!" );
-        
-        realSystem.AutoRun();
-        realBallTrajectory = realSystem.GetTransformedCentroids();
-        realSystem.SaveRealResults();
-        
-
-        Debug.Log("Got RealBall's trajectory!" + realBallTrajectory.First().Key + " -- " + realBallTrajectory.First().Value);
-    }
 
  
 
     // Simulate single trajectory
     void StartSimulateTrajectory()
     {
-        // Get StartingPosition of RealBall
-        virtualSystem.SetStartingPosition(realBallTrajectory.First().Value);
+        if (start)
+        {
+            // Get StartingPosition of RealBall
+            virtualSystem.SetStartingPosition(new Vector3(0.0f, 0.0f, 0.0f));
+            start = false;
+        }
+        
         // Simulate virtual ball
         virtualSystem.ToStartPosition();
         virtualSystem.DropBall();
@@ -74,7 +57,7 @@ public class SystemManager : MonoBehaviour
     void EndSimulateTrajectory()
     {
         virtualSystem.StopTracking();
-        virtualSystem.SaveVirtualResults();
+        // virtualSystem.SaveVirtualResults();
     }
 
 

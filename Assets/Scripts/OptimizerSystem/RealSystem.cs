@@ -10,14 +10,8 @@ public class RealSystem : MonoBehaviour
 {
     public string centroidFilePath = "Assets/MyAssets/centroids.txt";
     public string transformedCentroidFilePath = "Assets/MyAssets/transformedCentroids.txt";
-    public TMP_Text statusText;  // UI Text to show the current status or message
     public GameObject Ref; // Typically camera
 
-    //// Real-object related buttons
-    //public Button AutoRunBtn;
-    //public Button NextFrameBtn;
-    //public Button PrevFrameBtn;
-    //public Button SaveRealResultsBtn;
 
     private SortedDictionary<double, Vector3> centroids = new SortedDictionary<double, Vector3>();  // List to hold centroid data
     private SortedDictionary<double, Vector3> transformedCentroids = new SortedDictionary<double, Vector3>();  // Transformed world coordinates
@@ -28,10 +22,7 @@ public class RealSystem : MonoBehaviour
     {
         LoadCentroidsFromFile();  // Load centroids from the text file
 
-        //AutoRunBtn.onClick.AddListener(AutoRun);
-        //NextFrameBtn.onClick.AddListener(NextFrame);
-        //PrevFrameBtn.onClick.AddListener(PrevFrame);
-        //SaveRealResultsBtn.onClick.AddListener(SaveRealResults);
+
     }
 
     // Load the centroid data from a text file
@@ -71,23 +62,9 @@ public class RealSystem : MonoBehaviour
     {
         return transformedCentroids;
     }
-    public void AutoRun()
+
+    public void SaveRealResults()
     {
-        for (currentFrame = 0; currentFrame < centroids.Count; currentFrame++)
-        {
-            updateFrame();
-        }
-        currentFrame = 0;
-    }
-    public void NextFrame() {
-        currentFrame++;
-        updateFrame();
-    }
-    public void PrevFrame() {
-        currentFrame--;
-        updateFrame();
-    }
-    public void SaveRealResults() {
         // Append the transformed centroids data to the file
         using (StreamWriter writer = new StreamWriter(transformedCentroidFilePath, false))  // true to append
         {
@@ -104,33 +81,6 @@ public class RealSystem : MonoBehaviour
 
     void LogAndDisplay(string str)
     {
-        statusText.text = str;
         Debug.Log(str);
     }
-
-    void updateFrame()
-    {
-        statusText.text = currentFrame.ToString();
-        if (currentFrame < centroids.Count && currentFrame >= 0)
-        {
-            double key = centroids.ElementAt(currentFrame).Key;
-            Vector3 localCentroid = centroids[key];  // Get the centroid for the current frame
-
-            // Convert to world space using the reference object
-            Vector3 worldCentroid = Ref.transform.TransformPoint(localCentroid);
-            worldCentroid.z *= -1;
-            transformedCentroids.Add(key, worldCentroid);  // Save the transformed world coordinates
-
-            // Update the position of the game object based on the transformed centroid
-            transform.position = worldCentroid;
-        }
-        else
-        {
-            // Reset when all centroids have been processed
-            currentFrame = 0;
-            LogAndDisplay("Transformation Completed!");
-        }
-    }
-
-
 }
