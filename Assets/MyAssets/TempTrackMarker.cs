@@ -6,42 +6,80 @@ using UnityEngine.UI;
 
 public class TempTrackMarker : MonoBehaviour
 {
-    public string filePath;
+    public string RealFilePath;
+    public string VirtualFilePath;
     public GameObject RefMarker;
-    public Button Track;
+    public GameObject VirtualBox;
+    public Button RealTrack;
+    public Button VirtualTrack;
+    public Button Push;
+    public Button Reset;
+    public float startVelocity; // We assume X, Y velocity is 0
 
-    private bool isTrack = false;
-    private StreamWriter writer;
+    private bool isRealTrack = false;
+    private bool isVirtualTrack = false;
+    private StreamWriter RealWriter;
+    private StreamWriter VirtualWriter;
+    private Vector3 initPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        Track.onClick.AddListener(onTrack);
+        RealTrack.onClick.AddListener(onRealTrack);
+        VirtualTrack.onClick.AddListener(onVirtualTrack);
+        Push.onClick.AddListener(onPush);
+        Reset.onClick.AddListener(onReset);
+
+        
 
         // Open the file for writing
-        string fullPath = Path.Combine(Application.dataPath, filePath);
-        writer = new StreamWriter(filePath, false); // Overwrite file if it exists
-        Debug.Log($"Saving position data to: {filePath}");
+        RealWriter = new StreamWriter(RealFilePath, false); // Overwrite file if it exists
+
+        VirtualWriter = new StreamWriter(VirtualFilePath, false); // Overwrite file if it exists
+        Debug.Log($"Saving position data to: {VirtualFilePath}");
     }
 
-    void onTrack()
+    void onPush()
     {
-        isTrack = !isTrack;
+        initPosition = VirtualBox.GetComponent<Transform>().position;
+        VirtualBox.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, startVelocity));
+    }
+    void onReset()
+    {
+        VirtualBox.GetComponent<Transform>().position = initPosition;
+    }
+    void onRealTrack()
+    {
+        isRealTrack = !isRealTrack;
         // Ensure the file is closed when the application exits
-        if (!isTrack && writer != null)
+        if (!isRealTrack && RealWriter != null)
         {
-            writer.Close();
+            RealWriter.Close();
         }
-        if(isTrack && writer != null)
+        if(isRealTrack && RealWriter != null)
         {
-            writer = new StreamWriter(filePath, false);
+            RealWriter = new StreamWriter(RealFilePath, false);
+        }
+    }
+
+    void onVirtualTrack()
+    {
+        isVirtualTrack = !isVirtualTrack;
+        // Ensure the file is closed when the application exits
+        if (!isVirtualTrack && VirtualWriter != null)
+        {
+            VirtualWriter.Close();
+        }
+        if (isVirtualTrack && VirtualWriter != null)
+        {
+            VirtualWriter = new StreamWriter(VirtualFilePath, false);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isTrack)
+        if (isRealTrack)
         {
             // Get the position of the object in camera coordinates
             Vector3 camPosition = Camera.main.worldToCameraMatrix.MultiplyPoint(RefMarker.transform.position);
@@ -51,12 +89,31 @@ public class TempTrackMarker : MonoBehaviour
             string line = $"{timestamp}, {camPosition.x}, {camPosition.y}, {camPosition.z}";
             Debug.Log(line);
             // Write the line to the file
-            writer.WriteLine(line);
+            RealWriter.WriteLine(line);
 
             // Save and close file when the user presses "S"
             if (Input.GetKeyDown(KeyCode.S))
             {
-                writer.Close();
+                RealWriter.Close();
+                Debug.Log("Position data saved and file closed.");
+            }
+        }
+        if (isVirtualTrack)
+        {
+            // Get the position of the object in camera coordinates
+            Vector3 camPosition = Camera.main.worldToCameraMatrix.MultiplyPoint(RefMarker.transform.position);
+
+            // Record the position and timestamp
+            float timestamp = Time.time;
+            string line = $"{timestamp}, {camPosition.x}, {camPosition.y}, {camPosition.z}";
+            Debug.Log(line);
+            // Write the line to the file
+            VirtualWriter.WriteLine(line);
+
+            // Save and close file when the user presses "S"
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                VirtualWriter.Close();
                 Debug.Log("Position data saved and file closed.");
             }
         }
@@ -65,9 +122,13 @@ public class TempTrackMarker : MonoBehaviour
     void OnApplicationQuit()
     {
         // Ensure the file is closed when the application exits
-        if (writer != null)
+        if (VirtualWriter != null)
         {
-            writer.Close();
+            VirtualWriter.Close();
+        }
+        if (RealWriter != null)
+        {
+            RealWriter.Close();
         }
     }
 }
