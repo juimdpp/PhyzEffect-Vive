@@ -13,6 +13,7 @@ s .gitignore file should be placed at the root of your Unity project directory
 /[Aa]ssets/[Ss]treamingAssets.meta
 *.svo*
 /GitIgnoredFiles/
+/project-deliverables/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
