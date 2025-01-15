@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class PositionAndScaleObject : MonoBehaviour
 {
+    public delegate void PositionUpdated(Vector3 position);
+    public static event PositionUpdated OnPositionUpdated;
+
     public GameObject RefCube1;
     public GameObject RefCube2;
     public GameObject RefCube3;
@@ -56,6 +59,8 @@ public class PositionAndScaleObject : MonoBehaviour
         // Update position to the middle cube, but put it a bit in front and on top. Define bit as half the size of the arucoMarker (one of the RefCubes)
         float shiftOffset = RefCube2.GetComponent<Transform>().localScale.x;
         transform.position = RefPos2;
+
+        OnPositionUpdated?.Invoke(transform.position);
     }
 
     // Update is called once per frame
