@@ -1234,8 +1234,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.6217403, y: 0.021333039, z: 0.46940953}
-  m_Center: {x: -0.13896, y: 0.5600436, z: 0.2697556}
+  m_Size: {x: 0.6217403, y: 0.13043696, z: 0.46940976}
+  m_Center: {x: -0.13896, y: 0.514411, z: 0.26975587}
 --- !u!1 &473514575
 GameObject:
   m_ObjectHideFlags: 0
@@ -5740,12 +5740,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartAutoSimBtn: {fileID: 556336033}
   StopAutoSimBtn: {fileID: 1561881524}
-  OptInteractionDpdwn: {fileID: 1235503014}
+  ChangeInteractionDpdwn: {fileID: 1235503014}
   SearchMethodDpdwn: {fileID: 127506298}
   VirtualBall: {fileID: 2142249193}
-  VirtualBox: {fileID: 496186687}
-  RealObject: {fileID: 0}
-  SimulatedFilePath: GitIgnoredFiles/temp.txt
+  RealObject: {fileID: 448966786}
+  SimulatedFilePath: temp.txt
 --- !u!4 &1746887593
 Transform:
   m_ObjectHideFlags: 0
@@ -7931,7 +7930,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.99973327, z: -0.023097351, w: 0}
   m_LocalPosition: {x: -0.099, y: 0.149, z: 0.145}
-  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
+  m_LocalScale: {x: 0.06, y: 0.06, z: 0.06}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1015959735}

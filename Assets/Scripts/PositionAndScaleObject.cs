@@ -32,7 +32,8 @@ public class PositionAndScaleObject : MonoBehaviour
 
     void Recalibrate()
     {
-        RefPos1 = RefCube1.GetComponent<Transform>().position;
+        // TODO: uncomment this!!
+        /*RefPos1 = RefCube1.GetComponent<Transform>().position;
         RefPos2 = RefCube2.GetComponent<Transform>().position;
         RefPos3 = RefCube3.GetComponent<Transform>().position;
         DeskPos1 = DeskCube1.GetComponent<Transform>().position;
@@ -58,7 +59,7 @@ public class PositionAndScaleObject : MonoBehaviour
 
         // Update position to the middle cube, but put it a bit in front and on top. Define bit as half the size of the arucoMarker (one of the RefCubes)
         float shiftOffset = RefCube2.GetComponent<Transform>().localScale.x;
-        transform.position = RefPos2;
+        transform.position = RefPos2;*/
 
         OnPositionUpdated?.Invoke(transform.position);
     }
