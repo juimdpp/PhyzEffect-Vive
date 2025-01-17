@@ -1232,7 +1232,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.6217403, y: 0.13043696, z: 0.46940976}
   m_Center: {x: -0.13896, y: 0.514411, z: 0.26975587}
@@ -5744,7 +5744,7 @@ MonoBehaviour:
   SearchMethodDpdwn: {fileID: 127506298}
   VirtualBall: {fileID: 2142249193}
   RealObject: {fileID: 448966786}
-  SimulatedFilePath: temp.txt
+  SimulatedFilePath: GitIgnoredFiles/temp.txt
 --- !u!4 &1746887593
 Transform:
   m_ObjectHideFlags: 0
