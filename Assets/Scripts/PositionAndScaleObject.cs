@@ -32,7 +32,6 @@ public class PositionAndScaleObject : MonoBehaviour
 
     void Recalibrate()
     {
-        // TODO: uncomment this!!
         /*RefPos1 = RefCube1.GetComponent<Transform>().position;
         RefPos2 = RefCube2.GetComponent<Transform>().position;
         RefPos3 = RefCube3.GetComponent<Transform>().position;
@@ -48,7 +47,7 @@ public class PositionAndScaleObject : MonoBehaviour
         float deskHeight = Mathf.Abs(DeskPos1.y - DeskPos2.y);
         float deskDepth = Mathf.Abs(DeskPos2.z - DeskPos3.z);
 
-        
+
         transform.localScale = new Vector3(refWidth / deskWidth, refHeight / deskHeight, refDepth / deskDepth);
 
         Debug.Log("RefCube1: " + RefPos1 + " worldToCam: " + Camera.main.worldToCameraMatrix.MultiplyPoint(RefPos1));
