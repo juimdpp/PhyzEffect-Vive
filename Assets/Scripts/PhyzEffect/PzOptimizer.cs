@@ -20,7 +20,7 @@ public class PzOptimizer : MonoBehaviour
     private PzVirtualObject VirtualObject;
     public GameObject RealObject;
     // User inputs (can be changed to private)
-    public string SimulatedFilePath;
+    public string SimulatedTrajectoryFilePath;
 
     // Interactions
     private PzInteraction CurrentInteraction;
@@ -91,7 +91,7 @@ public class PzOptimizer : MonoBehaviour
     {
         CurrentInteraction.StopAllSimulations();
         isSimulating = false;
-        SimulationUtils.SaveToFile(SimulatedFilePath, "timestamp,x,y,z", trajectory);
+        SimulationUtils.SaveToFile(SimulatedTrajectoryFilePath, "timestamp,x,y,z", trajectory);
     }
     void HandleInfMovement()
     {
@@ -143,6 +143,6 @@ public class PzOptimizer : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        SimulationUtils.SaveToFile(SimulatedFilePath, "timestamp,x,y,z", trajectory);
+        SimulationUtils.SaveToFile(SimulatedTrajectoryFilePath, "timestamp,x,y,z", trajectory);
     }
 }
