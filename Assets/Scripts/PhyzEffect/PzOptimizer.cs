@@ -57,14 +57,6 @@ public class PzOptimizer : MonoBehaviour
         // VirtualObject.GetComponent<Transform>().position = 
     }
 
-    //// Update is called once per frame
-    //void FixedUpdate()
-    //{
-    //    if (isSimulating)
-    //    {
-    //        trajectory[Time.fixedTimeAsDouble] = CurrentInteraction.VirtObj.transform.position;
-    //    }
-    //}
 
     // TODO: change to newPosition instead ?? (verify)
     void UpdateStartingPosition(Vector3 newPosition)

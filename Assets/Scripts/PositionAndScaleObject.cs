@@ -60,6 +60,10 @@ public class PositionAndScaleObject : MonoBehaviour
         float shiftOffset = RefCube2.GetComponent<Transform>().localScale.x;
         transform.position = RefPos2;*/
 
+        // TEMP code that positions desk in fixed position (START)
+        transform.position -= DeskCube2.GetComponent<Transform>().position;
+        // END
+
         OnPositionUpdated?.Invoke(transform.position);
     }
 
