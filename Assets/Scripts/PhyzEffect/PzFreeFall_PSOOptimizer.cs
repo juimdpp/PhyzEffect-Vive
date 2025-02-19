@@ -15,17 +15,14 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
     // Event
     public event PzInteraction.Event OnEndAllSimulations;
 
-    private float gridStep = 0.1f; // TODO: make this controllable by PzOptimizer;
-    private List<(float, float)> ParamsCombinations = new List<(float, float)>();
-    private int currParamIdx = 0;
     private bool isSimulating = false;
 
     // Optimizations
     private List<Particle> swarm = new List<Particle>();
-    private int swarmSize = 10;
+    private int swarmSize = 5;
     private (float, float) globalBestPosition;
     private float globalBestError = 1.0f;
-    private int maxIteration = 10;
+    private int maxIteration = 3;
     private int currIter = 0;
     private int currParticleIdx = 0;
     
@@ -52,22 +49,13 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
 
     public void StartOptimization()
     {
-        Debug.Log($"Before loading: {realTrajectory.Count}");
         SimulationUtils.LoadFile("simpleFreeFallTrajectory.txt", realTrajectory);
         Debug.Log($"Load real trajectory in PSO Optimizer: {realTrajectory.Count}");
-        foreach(var val in realTrajectory)
-        {
-            Debug.Log($"{val.Key}, {val.Value}");
-        }
 
-        isSimulating = true;
         Debug.Log("Start PSO Optimization for freefall");
 
         PSO_Initialize();
-
-        UpdateParams();
-        StartSingleSimulation();
-        // TODO: params
+        PSO();
     }
     public void StopOptimization()
     {
@@ -88,8 +76,6 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
         // PSO
         currParticleIdx = 0;
         currIter = 0;
-
-        ResetEnv();
     }
 
     private void PSO()
@@ -106,13 +92,11 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
     }
 
 
-    // Set environment to default (gravity and position), then check if we should continue simulating or not.
+    // Set environment to default (gravity and position) and empty tracked simulated trajectory
     private void ResetEnv()
     {
-        Debug.Log("ResetEnv");
         VirtObj.GetComponent<Rigidbody>().useGravity = false;
         VirtObj.GetComponent<Transform>().position = realTrajectory.First().Value; // Set to initial position
-        Debug.Log($"HELLOOOOOO -- {realTrajectory.First().Value}");
         currSimTrajectory.Clear();
     }
 
@@ -153,13 +137,11 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
                     currParticleIdx = 0;
                 }
                 PSO(); // Trigger a new simulation
-            }
-            // UpdateParams();
-            
+            }            
         }
         else
         {
-            OnEndAllSimulations?.Invoke();
+            StopOptimization();
         }
     }
 
@@ -189,7 +171,7 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
         }
 
         float mse = error/realTrajectory.Count;
-        Debug.Log($"Error: {mse}");
+        Debug.Log($"{currIter} iteration, {currParticleIdx} index ({swarm[currParticleIdx]}) error: {mse}");
         return mse;
     }
 
@@ -222,13 +204,9 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
 
     private void UpdateParams()
     {
-        var tuple = swarm[currParticleIdx].position;
-        Debug.Log("UpdateParams to " + tuple);
         VirtObj.GetComponent<Collider>().material.bounciness = swarm[currParticleIdx].position.Item1;
         RealObj.GetComponent<Collider>().material.bounciness = swarm[currParticleIdx].position.Item2;
     }
-
-    // void ReturnTrajectory();
 }
 
 class Particle

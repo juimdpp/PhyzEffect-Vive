@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
+/*
+ * Function: UI Interface to change Optimizer and InteractionType
+ */
 
 public class PzOptimizer : MonoBehaviour
 {
@@ -28,8 +30,6 @@ public class PzOptimizer : MonoBehaviour
 
     // Other private stuff
     private Vector3 StartingPosition;
-    private SortedDictionary<double, Vector3> trajectory = new SortedDictionary<double, Vector3>();
-    private bool isSimulating;
 
     // Start is called before the first frame update
     void Start()
@@ -52,13 +52,10 @@ public class PzOptimizer : MonoBehaviour
         // Initialize interaction type to FreeFall by default
         ChangeInteractionHandler(0);
 
-
-        // Take first starting position of real object from loaded trajectory and assign to VirtualObject
-        // VirtualObject.GetComponent<Transform>().position = 
     }
 
 
-    // TODO: change to newPosition instead ?? (verify)
+    // TODO: check if we can remove this since we're extracting real trajectory (from which we should normally get the starting position) in the optimizer code
     void UpdateStartingPosition(Vector3 newPosition)
     {
         if (VirtualObject)
@@ -78,21 +75,17 @@ public class PzOptimizer : MonoBehaviour
     // UI handlers
     void StartAutoSimHandler()
     {
-        trajectory.Clear();
-        isSimulating = true;
         CurrentInteraction.StartOptimization();
     }
 
     void StopAutoSimHandler()
     {
         CurrentInteraction.StopOptimization();
-        isSimulating = false;
-        SimulationUtils.SaveToFile(SimulatedTrajectoryFilePath, "timestamp,x,y,z", trajectory);
     }
     void HandleInfMovement()
     {
         Debug.Log("Abnormal movement detected. Stopping automatic simulation");
-        // StopAutoSimHandler();
+        StopAutoSimHandler();
     }
 
     void ChangeInteractionHandler(int val)
@@ -138,13 +131,8 @@ public class PzOptimizer : MonoBehaviour
     }
 
     
-        void SearchMethodHandler(int val)
+    void SearchMethodHandler(int val)
     {
-
-    }
-
-    private void OnApplicationQuit()
-    {
-        SimulationUtils.SaveToFile(SimulatedTrajectoryFilePath, "timestamp,x,y,z", trajectory);
+        // TODO
     }
 }
