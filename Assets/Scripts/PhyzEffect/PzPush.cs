@@ -8,6 +8,7 @@ public class PzPush : MonoBehaviour, PzInteraction
     public PzVirtualObject VirtObj { get; set; }
     public Vector3 StartingPosition { get; set; }
     public Vector3 EndPosition { get; set; }
+    public SortedDictionary<double, Vector3> realTrajectory { get; set; }
     public event PzInteraction.Event OnEndAllSimulations;
 
     private float gridStep = 0.1f; // TODO: make this controllable by PzOptimizer;
@@ -25,7 +26,7 @@ public class PzPush : MonoBehaviour, PzInteraction
             VirtObj.OnRest += StopSingleSimulation;
         }
     }
-    public void StartAllSimulations() {
+    public void StartOptimization() {
         Debug.Log("HYUNSOO - PZPUSH: StartAllSimulations");
         isSimulating = true;
         direction = (EndPosition - StartingPosition).normalized;
@@ -47,7 +48,7 @@ public class PzPush : MonoBehaviour, PzInteraction
         StartSingleSimulation();
         // TODO: params
     }
-    public void StopAllSimulations() {
+    public void StopOptimization() {
         Debug.Log("HYUNSOO - PZPUSH: StopAllSimulations");
         isSimulating = false;
         ResetEnv();

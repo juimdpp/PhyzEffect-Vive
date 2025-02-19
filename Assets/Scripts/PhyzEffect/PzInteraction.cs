@@ -14,13 +14,14 @@ public interface PzInteraction // FreeFall (bounceV, bounceR), Slide (frictionV,
     PzVirtualObject VirtObj { get; set; }
     Vector3 StartingPosition { get; set; }
     Vector3 EndPosition { get; set; }
+    SortedDictionary<double, Vector3> realTrajectory { get; set; }
 
     public delegate void Event();
     public event Event OnEndAllSimulations;
 
     
     // Start the automatic simulation process
-    void StartAllSimulations();
+    void StartOptimization();
     // Stop the automatic simulation process (
-    void StopAllSimulations();
+    void StopOptimization();
 }

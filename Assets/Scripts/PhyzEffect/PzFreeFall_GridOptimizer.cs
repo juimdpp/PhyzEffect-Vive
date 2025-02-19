@@ -10,6 +10,7 @@ public class PzFreeFall : MonoBehaviour, PzInteraction
     public PzVirtualObject VirtObj { get; set; }
     public Vector3 StartingPosition { get; set; }
     public Vector3 EndPosition { get; set; } // Not used
+    public SortedDictionary<double, Vector3> realTrajectory { get; set; }
 
     // Event
     public event PzInteraction.Event OnEndAllSimulations;
@@ -24,11 +25,12 @@ public class PzFreeFall : MonoBehaviour, PzInteraction
         VirtObj = GetComponent<PzVirtualObject>();
         if (VirtObj != null)
         {
-            VirtObj.OnRest += StopSingleSimulation;
+            VirtObj.OnRest += StopSingleSimulation; 
         }
+        realTrajectory = new SortedDictionary<double, Vector3>();
     }
     
-    public void StartAllSimulations()
+    public void StartOptimization()
     {
         isSimulating = true;
         Debug.Log("Start Auto Simulation (for freefall, start gravity, for friction, push motion)");
@@ -47,7 +49,7 @@ public class PzFreeFall : MonoBehaviour, PzInteraction
         StartSingleSimulation();
         // TODO: params
     }
-    public void StopAllSimulations()
+    public void StopOptimization()
     {
         isSimulating = false;
         ResetEnv();
@@ -94,6 +96,7 @@ public class PzFreeFall : MonoBehaviour, PzInteraction
         VirtObj.GetComponent<Collider>().material.bounciness = tuple.Item1;
         RealObj.GetComponent<Collider>().material.bounciness = tuple.Item2;
         currParamIdx++;
+        Debug.Log($"HELLO - {realTrajectory.Count}");
     }
 
     // void ReturnTrajectory();

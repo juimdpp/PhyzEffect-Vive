@@ -1,6 +1,6 @@
 
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -21,6 +21,7 @@ public class PzOptimizer : MonoBehaviour
     public GameObject RealObject;
     // User inputs (can be changed to private)
     public string SimulatedTrajectoryFilePath;
+    public string[] RealTrajectoryFilePaths;
 
     // Interactions
     private PzInteraction CurrentInteraction;
@@ -48,19 +49,22 @@ public class PzOptimizer : MonoBehaviour
         // Triggered after scanned scene is positioned and scaled
         PositionAndScaleObject.OnPositionUpdated += UpdateStartingPosition;
         
-
-        // Initialize to FreeFall by default
+        // Initialize interaction type to FreeFall by default
         ChangeInteractionHandler(0);
+
+
+        // Take first starting position of real object from loaded trajectory and assign to VirtualObject
+        // VirtualObject.GetComponent<Transform>().position = 
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (isSimulating)
-        {
-            trajectory[Time.fixedTimeAsDouble] = CurrentInteraction.VirtObj.transform.position;
-        }
-    }
+    //// Update is called once per frame
+    //void FixedUpdate()
+    //{
+    //    if (isSimulating)
+    //    {
+    //        trajectory[Time.fixedTimeAsDouble] = CurrentInteraction.VirtObj.transform.position;
+    //    }
+    //}
 
     // TODO: change to newPosition instead ?? (verify)
     void UpdateStartingPosition(Vector3 newPosition)
@@ -84,12 +88,12 @@ public class PzOptimizer : MonoBehaviour
     {
         trajectory.Clear();
         isSimulating = true;
-        CurrentInteraction.StartAllSimulations();
+        CurrentInteraction.StartOptimization();
     }
 
     void StopAutoSimHandler()
     {
-        CurrentInteraction.StopAllSimulations();
+        CurrentInteraction.StopOptimization();
         isSimulating = false;
         SimulationUtils.SaveToFile(SimulatedTrajectoryFilePath, "timestamp,x,y,z", trajectory);
     }
@@ -101,6 +105,7 @@ public class PzOptimizer : MonoBehaviour
 
     void ChangeInteractionHandler(int val)
     {
+        Debug.Log("ChangeInteractionHandler");
         // Destroy old interaction component
         if (CurrentInteraction is MonoBehaviour oldInteraction)
         {
@@ -110,13 +115,15 @@ public class PzOptimizer : MonoBehaviour
         switch ((PzInteractionType)val)
         {
             case PzInteractionType.Pz_Bounciness_FreeFall:
-                var freeFall = VirtualBall.AddComponent<PzFreeFall>();
+                var freeFall = VirtualBall.AddComponent<PzPSOOptimizer>();
                 VirtualObject = VirtualBall.AddComponent<PzVirtualObject>();
                 VirtualObject.OnInfMovement += HandleInfMovement;
                 CurrentInteraction = freeFall;
                 // Event handler: Triggered when all possible combination of parameters are simulated
                 CurrentInteraction.OnEndAllSimulations += StopAutoSimHandler;
                 CurrentInteraction.RealObj = RealObject;
+                // Load real trajectory from file (default = FreeFall)
+                // SimulationUtils.LoadFile(RealTrajectoryFilePaths[0], CurrentInteraction.realTrajectory);
                 Debug.Log("HYUNSOO, freefall interaction");
                 break;
             case PzInteractionType.Pz_Bounciness_Push:
@@ -127,6 +134,8 @@ public class PzOptimizer : MonoBehaviour
                 // Event handler: Triggered when all possible combination of parameters are simulated
                 CurrentInteraction.OnEndAllSimulations += StopAutoSimHandler;
                 CurrentInteraction.RealObj = RealObject;
+                // Load real trajectory from file (default = FreeFall)
+                // LoadFile(RealTrajectoryFilePaths[1]);
                 Debug.Log("HYUNSOO, push interaction");
                 break;
             default:
@@ -136,7 +145,8 @@ public class PzOptimizer : MonoBehaviour
         }
     }
 
-    void SearchMethodHandler(int val)
+    
+        void SearchMethodHandler(int val)
     {
 
     }
