@@ -19,10 +19,10 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
 
     // Optimizations
     private List<Particle> swarm = new List<Particle>();
-    private int swarmSize = 5;
+    private int swarmSize = 10;
     private (float, float) globalBestPosition;
     private float globalBestError = 1.0f;
-    private int maxIteration = 3;
+    private int maxIteration = 5;
     private int currIter = 0;
     private int currParticleIdx = 0;
     
@@ -128,6 +128,7 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
                     {
                         globalBestError = err;
                         globalBestPosition = swarm[currParticleIdx].bestPosition;
+                        Debug.Log($"BEST POSITION: {currIter} iteration, {currParticleIdx} index ({globalBestPosition}) error: {err}");
                     }
                 }
                 currParticleIdx++;
@@ -147,9 +148,6 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
 
     private float CalculateError()
     {
-        SimulationUtils.SaveToFile($"{currParticleIdx},{currIter}_simTrajectory_{swarm[currParticleIdx].bestPosition}.txt", "timestamp,x,y,z", currSimTrajectory);
-        SimulationUtils.SaveToFile("realTrajectory.txt", "timestamp,x,y,z", realTrajectory);
-
         if(currSimTrajectory.Count == 0 || realTrajectory.Count == 0)
         {
             Debug.LogWarning("One or both trajectories are empty. Please check.");
@@ -172,6 +170,8 @@ public class PzPSOOptimizer : MonoBehaviour, PzInteraction
 
         float mse = error/realTrajectory.Count;
         Debug.Log($"{currIter} iteration, {currParticleIdx} index ({swarm[currParticleIdx]}) error: {mse}");
+        SimulationUtils.SaveToFile($"{currIter},{currParticleIdx}_simTrajectory_{swarm[currParticleIdx].bestPosition}_{mse}.txt", "timestamp,x,y,z", currSimTrajectory);
+        SimulationUtils.SaveToFile("realTrajectory.txt", "timestamp,x,y,z", realTrajectory);
         return mse;
     }
 
